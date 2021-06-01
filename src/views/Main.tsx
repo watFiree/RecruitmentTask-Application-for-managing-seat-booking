@@ -1,9 +1,8 @@
-import { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { seatsState, fetchSeatsFromDatabase } from "../app/seatsSlice";
+import { useAppSelector } from "../app/hooks";
+import { seatsState } from "../app/seatsSlice";
 
 import {
   Layout,
@@ -18,16 +17,8 @@ import {
 const { Text } = Typography;
 
 const App = () => {
-  const dispatch = useAppDispatch();
-  const seats = useAppSelector(seatsState);
   const history = useHistory();
-
-  //get seats from server
-  useEffect(() => {
-    if (!seats.data.length) {
-      dispatch(fetchSeatsFromDatabase());
-    }
-  }, [dispatch, seats.data.length]);
+  const seats = useAppSelector(seatsState);
 
   return (
     <Layout
@@ -48,8 +39,16 @@ const App = () => {
             .moreThan(0, "Liczba miejsc powinna być większa od zera"),
         })}
         onSubmit={({ places, nextToEachOther }) => {
-          // check if enough left to reserve
-          history.push("/reserve", { places: Number(places), nextToEachOther });
+          // checks if enough left to reserve
+          if (Number(places) > seats.free.length) {
+            return alert(
+              `Obecnie dostępne jest tylko ${seats.free.length} miejsc`
+            );
+          }
+          return history.push("/reserve", {
+            places: Number(places),
+            nextToEachOther,
+          });
         }}
       >
         <Form

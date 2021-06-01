@@ -1,41 +1,29 @@
 import React from "react";
+import { SeatsColors } from "../types";
 
 import { Typography } from "antd";
-
 const { Text } = Typography;
 
-type Colors = "orange" | "darkgray" | "white";
-
-const Box: React.FC<{ backgroundColor?: Colors; id?: string }> = ({
-  backgroundColor = "white",
-  id,
+const Box: React.FC<{ backgroundColor: SeatsColors; label: string }> = ({
+  backgroundColor,
+  label,
 }) => (
-  <div
-    style={{
-      border: "1px solid",
-      width: "60px",
-      height: "60px",
-      backgroundColor,
-    }}
-  >
-    {id}
-  </div>
-);
-
-export const BoxWithLabel: React.FC<{
-  backgroundColor?: Colors;
-  label: string;
-}> = ({ backgroundColor = "white", label }) => (
   <div
     style={{
       display: "flex",
       alignContent: "center",
       justifyContent: "center",
-
       fontSize: 16,
     }}
   >
-    <Box backgroundColor={backgroundColor} />
+    <div
+      style={{
+        border: "1px solid",
+        width: "60px",
+        height: "60px",
+        backgroundColor,
+      }}
+    />
     <Text
       style={{
         display: "flex",

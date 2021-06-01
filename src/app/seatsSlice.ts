@@ -1,8 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Seat, SimplifiedSeat } from "../types";
 
 import { RootState } from "./store";
 import createMatrix from "../functions/createMatrix";
+import getMinAndMax from "../functions/getMinAndMax";
 
 const initialState: State = {
   data: [],
@@ -21,32 +23,49 @@ export const fetchSeatsFromDatabase = createAsyncThunk(
 export const seatsSlice = createSlice({
   name: "seats",
   initialState,
-  reducers: {},
-  extraReducers: {
-    [String(fetchSeatsFromDatabase.fulfilled)]: (state, action) => {
-      const allX = action.payload.map((seat: Seat) => seat.cords.x);
-      const allY = action.payload.map((seat: Seat) => seat.cords.y);
-      const minX = Math.min(...allX);
-      const maxX = Math.max(...allX);
-      const minY = Math.min(...allY);
-      const maxY = Math.max(...allY);
-      const matrix = createMatrix(maxX + 1 - minX, maxY + 1 - minY);
-      action.payload.forEach((seat: Seat) => {
-        matrix[seat.cords.x - minX][seat.cords.y - minY] = seat;
-        if (seat.reserved) {
-          state.reserved.push(seat.id);
-        } else {
-          state.free.push(seat.id);
-        }
+  reducers: {
+    reserveSeats: (state, action: PayloadAction<SimplifiedSeat[]>) => {
+      const reserved = action.payload;
+      if (!reserved.length) return;
+
+      reserved.forEach((place) => {
+        state.data[place.x][place.y] = {
+          ...state.data[place.x][place.y],
+          reserved: true,
+        };
       });
-      state.data = matrix;
+    },
+  },
+  extraReducers: {
+    [String(fetchSeatsFromDatabase.fulfilled)]: (
+      state,
+      action: PayloadAction<Seat[]>
+    ) => {
+      const allX = action.payload.map((seat) => seat.cords.x);
+      const allY = action.payload.map((seat) => seat.cords.y);
+      //get max and min to create appropriate matrix
+      const x = getMinAndMax(allX);
+      const y = getMinAndMax(allY);
+
+      state.data = createMatrix(x.max + 1 - x.min, y.max + 1 - y.min);
+
+      action.payload.forEach((seat) => {
+        //add seat to matrix
+        state.data[seat.cords.x - x.min][seat.cords.y - y.min] = seat;
+
+        //add seat to reserved or free
+        state[seat.reserved ? "reserved" : "free"] = [
+          ...state[seat.reserved ? "reserved" : "free"],
+          seat.id,
+        ];
+      });
     },
   },
 });
 
 export const seatsState = (state: RootState) => state.seats;
 
-// export const { fetchSeatsFromDatabase } = seatsSlice.caseReducers;
+export const { reserveSeats } = seatsSlice.actions;
 
 export default seatsSlice.reducer;
 
@@ -54,13 +73,4 @@ interface State {
   data: Seat[][];
   free: string[];
   reserved: string[];
-}
-
-interface Seat {
-  id: string;
-  cords: {
-    y: number;
-    x: number;
-  };
-  reserved: boolean;
 }

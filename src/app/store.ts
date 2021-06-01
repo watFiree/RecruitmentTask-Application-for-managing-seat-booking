@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import seatsReducer from "./seatsSlice";
+import reservationsReducer from "./reservationsSlice";
 
 export const store = configureStore({
   reducer: {
     seats: seatsReducer,
+    reservations: reservationsReducer,
   },
 });
 
