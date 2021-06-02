@@ -19,8 +19,10 @@ const Box: React.FC<{ backgroundColor: SeatsColors; label: string }> = ({
     <div
       style={{
         border: "1px solid",
-        width: "60px",
-        height: "60px",
+        maxWidth: "60px",
+        maxHeight: "60px",
+        width: "6vw",
+        height: "6vw",
         backgroundColor,
       }}
     />

@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { useLocation, useHistory, Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { seatsState, reserveSeats } from "../app/seatsSlice";
-import { makeReservation } from "../app/reservationsSlice";
-import useReserveSeat from "../hooks/useReserveSeat";
+import { useState, useEffect } from 'react';
+import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { seatsState, reserveSeats } from '../app/seatsSlice';
+import { makeReservation } from '../app/reservationsSlice';
+import useReserveSeat from '../hooks/useReserveSeat';
 
-import { Layout, Alert, Button } from "antd";
-import Box from "../components/Box";
-import Seat from "../components/Seat";
+import { Layout, Alert, Button } from 'antd';
+import Box from '../components/Box';
+import Seat from '../components/Seat';
 
 const ReserveSeats = () => {
   const { state } = useLocation<LocationState>();
@@ -15,10 +15,7 @@ const ReserveSeats = () => {
   const seats = useAppSelector(seatsState);
   const dispatch = useAppDispatch();
   const [error, setError] = useState(false);
-  const [seatsChoosen, handleSeatClick] = useReserveSeat(
-    state?.places || 0,
-    state?.nextToEachOther || false
-  );
+  const [seatsChoosen, handleSeatClick] = useReserveSeat(state?.tickets || 0, state?.nextToEachOther || false);
 
   useEffect(() => {
     if (state === undefined) {
@@ -27,26 +24,33 @@ const ReserveSeats = () => {
   }, [state]);
 
   const handleReserve = () => {
-    history.push("/summary", seatsChoosen);
+    history.push('/summary', seatsChoosen);
     dispatch(reserveSeats(seatsChoosen));
     dispatch(makeReservation(seatsChoosen));
   };
 
   return (
-    <Layout style={{ width: "100%", height: "100vh", display: "flex" }}>
+    <Layout
+      style={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
       {error ? (
         <div
           style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
             paddingTop: 16,
           }}
         >
           <Alert
-            style={{ width: "30%" }}
+            style={{ width: '30%' }}
             message="Błąd"
             description="Brak podanej liczby miejsc do rezerwacji. Wróć do strony głownej."
             type="error"
@@ -60,23 +64,33 @@ const ReserveSeats = () => {
         <>
           <div
             style={{
-              height: "90%",
+              height: 'calc(100% - 100px)',
+              width: '100%',
               paddingBottom: 16,
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "flex-start",
-              justifyContent: "center",
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              flexDirection: 'column',
+              justifyContent: 'center',
             }}
           >
             {seats.data.map((row, rowIndex) => (
-              <div key={rowIndex}>
+              <div
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                key={rowIndex}
+              >
                 {row.map((seat, seatIndex) => {
-                  const chosenIds = seatsChoosen.map((seat) => seat.id);
+                  const chosenIds = seatsChoosen.map(seat => seat.id);
                   const backgroundColor = seat.reserved
-                    ? "darkgray"
+                    ? 'darkgray'
                     : chosenIds.includes(seat?.id)
-                    ? "orange"
-                    : "white";
+                    ? 'orange'
+                    : 'white';
                   return (
                     <Seat
                       key={seat?.id || String(rowIndex) + String(seatIndex)}
@@ -95,20 +109,20 @@ const ReserveSeats = () => {
 
           <div
             style={{
-              width: "100%",
-              height: "100px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-evenly",
+              width: '100%',
+              height: '100px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
             }}
           >
             <Box backgroundColor="white" label="Miejsca dostępne" />
             <Box backgroundColor="darkgray" label="Miejsca zarezerwowane" />
             <Box backgroundColor="orange" label="Twój wybór" />
             <Button
-              style={{ height: "75%", width: "250px" }}
+              style={{ height: '75%', width: '15%' }}
               size="large"
-              disabled={seatsChoosen.length !== state?.places}
+              disabled={seatsChoosen.length !== state?.tickets}
               onClick={handleReserve}
             >
               Rezerwuj
@@ -121,7 +135,7 @@ const ReserveSeats = () => {
 };
 
 type LocationState = {
-  places: number;
+  tickets: number;
   nextToEachOther: boolean;
 };
 

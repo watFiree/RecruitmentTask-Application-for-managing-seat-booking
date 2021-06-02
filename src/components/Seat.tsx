@@ -22,9 +22,11 @@ const Seat: React.FC<Props> = ({
     id={id}
     style={{
       border: "1px solid",
-      margin: 6,
-      width: "2.5vw",
-      height: "2.5vw",
+      margin: 4,
+      maxWidth: "48px",
+      maxHeight: "48px",
+      height: "5vw",
+      width: "5vw",
       opacity: id === undefined ? "0" : "1",
       cursor: reserved || id === undefined ? "auto" : "pointer",
       backgroundColor,

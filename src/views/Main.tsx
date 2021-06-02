@@ -31,22 +31,22 @@ const App = () => {
       }}
     >
       <Formik
-        initialValues={{ places: "", nextToEachOther: false }}
+        initialValues={{ tickets: "", nextToEachOther: false }}
         validationSchema={Yup.object().shape({
-          places: Yup.number()
+          tickets: Yup.number()
             .typeError("Podaj poprawną liczbę")
             .required("Podaj liczbę miejsc")
             .moreThan(0, "Liczba miejsc powinna być większa od zera"),
         })}
-        onSubmit={({ places, nextToEachOther }) => {
+        onSubmit={({ tickets, nextToEachOther }) => {
           // checks if enough left to reserve
-          if (Number(places) > seats.free.length) {
+          if (Number(tickets) > seats.free.length) {
             return alert(
               `Obecnie dostępne jest tylko ${seats.free.length} miejsc`
             );
           }
           return history.push("/reserve", {
-            places: Number(places),
+            tickets: Number(tickets),
             nextToEachOther,
           });
         }}
@@ -60,7 +60,7 @@ const App = () => {
         >
           <Space style={{ display: "flex" }} size="middle">
             <Text style={{ fontSize: 16 }}>Liczba miejsc:</Text>
-            <Field as={Input} id="places" name="places" />
+            <Field as={Input} id="tickets" name="tickets" />
           </Space>
 
           <Field
@@ -71,7 +71,7 @@ const App = () => {
             style={{ paddingTop: 16, paddingBottom: 16 }}
           />
 
-          <ErrorMessage name="places">
+          <ErrorMessage name="tickets">
             {(error) => (
               <Alert
                 style={{ marginBottom: 16 }}
