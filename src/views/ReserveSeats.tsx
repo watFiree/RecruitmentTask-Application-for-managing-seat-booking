@@ -85,8 +85,8 @@ const ReserveSeats = () => {
                 key={rowIndex}
               >
                 {row.map((seat, seatIndex) => {
-                  const chosenIds = seatsChoosen.map(seat => seat.id);
-                  const backgroundColor = seat.reserved
+                  const chosenIds = seatsChoosen.map(seat => seat?.id);
+                  const backgroundColor = seat?.reserved
                     ? 'darkgray'
                     : chosenIds.includes(seat?.id)
                     ? 'orange'

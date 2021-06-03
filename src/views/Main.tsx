@@ -1,18 +1,10 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { useHistory } from "react-router-dom";
-import { useAppSelector } from "../app/hooks";
-import { seatsState } from "../app/seatsSlice";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { useHistory } from 'react-router-dom';
+import { useAppSelector } from '../app/hooks';
+import { seatsState } from '../app/seatsSlice';
 
-import {
-  Layout,
-  Space,
-  Typography,
-  Input,
-  Checkbox,
-  Button,
-  Alert,
-} from "antd";
+import { Layout, Space, Typography, Input, Checkbox, Button, Alert } from 'antd';
 
 const { Text } = Typography;
 
@@ -23,29 +15,27 @@ const App = () => {
   return (
     <Layout
       style={{
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <Formik
-        initialValues={{ tickets: "", nextToEachOther: false }}
+        initialValues={{ tickets: '', nextToEachOther: false }}
         validationSchema={Yup.object().shape({
           tickets: Yup.number()
-            .typeError("Podaj poprawną liczbę")
-            .required("Podaj liczbę miejsc")
-            .moreThan(0, "Liczba miejsc powinna być większa od zera"),
+            .typeError('Podaj poprawną liczbę')
+            .required('Podaj liczbę miejsc')
+            .moreThan(0, 'Liczba miejsc powinna być większa od zera'),
         })}
         onSubmit={({ tickets, nextToEachOther }) => {
           // checks if enough left to reserve
           if (Number(tickets) > seats.free.length) {
-            return alert(
-              `Obecnie dostępne jest tylko ${seats.free.length} miejsc`
-            );
+            return alert(`Obecnie dostępne jest tylko ${seats.free.length} miejsc`);
           }
-          return history.push("/reserve", {
+          return history.push('/reserve', {
             tickets: Number(tickets),
             nextToEachOther,
           });
@@ -53,12 +43,12 @@ const App = () => {
       >
         <Form
           style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
           }}
         >
-          <Space style={{ display: "flex" }} size="middle">
+          <Space style={{ display: 'flex' }} size="middle">
             <Text style={{ fontSize: 16 }}>Liczba miejsc:</Text>
             <Field as={Input} id="tickets" name="tickets" />
           </Space>
@@ -72,14 +62,7 @@ const App = () => {
           />
 
           <ErrorMessage name="tickets">
-            {(error) => (
-              <Alert
-                style={{ marginBottom: 16 }}
-                message={error}
-                type="error"
-                showIcon
-              />
-            )}
+            {error => <Alert style={{ marginBottom: 16 }} message={error} type="error" showIcon />}
           </ErrorMessage>
 
           <Button htmlType="submit" size="large">

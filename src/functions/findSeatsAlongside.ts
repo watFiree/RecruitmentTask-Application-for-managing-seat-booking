@@ -6,20 +6,11 @@ const findSeatsAlongside = (seats: Seat[][], tickets: number): SimplifiedSeat[] 
 
   const picked: SimplifiedSeat[] = [];
   const longest: SimplifiedSeat[] = [];
-
   // find next to each other in one row
   for (let i in onlyAvailable) {
-    // clean after each row
-    if (picked.length === tickets) {
-      return picked;
-    } else {
-      picked.length = 0;
-    }
-
     for (const j in onlyAvailable[i]) {
       // if all tickets chosen return
       if (picked.length === tickets) {
-        console.log('picked');
         return picked;
       }
       if (onlyAvailable[i][j] !== '') {
@@ -35,6 +26,12 @@ const findSeatsAlongside = (seats: Seat[][], tickets: number): SimplifiedSeat[] 
         // clean picked if seat is not available
         picked.length = 0;
       }
+    }
+    // clean after each row
+    if (picked.length === tickets) {
+      return picked;
+    } else {
+      picked.length = 0;
     }
   }
 

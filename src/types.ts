@@ -13,4 +13,13 @@ export interface SimplifiedSeat {
   y: number;
 }
 
-export type SeatsColors = "orange" | "darkgray" | "white";
+export type SeatsColors = 'orange' | 'darkgray' | 'white';
+
+export interface SeatProps {
+  id: string | undefined;
+  x: number;
+  y: number;
+  reserved: boolean;
+  backgroundColor: SeatsColors;
+  handleClick: (data: SimplifiedSeat) => void;
+}
