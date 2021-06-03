@@ -68,7 +68,7 @@ const ReserveSeats = () => {
               width: '100%',
               paddingBottom: 16,
               display: 'flex',
-              flexWrap: 'wrap',
+              flexWrap: 'nowrap',
               alignItems: 'center',
               flexDirection: 'column',
               justifyContent: 'center',
