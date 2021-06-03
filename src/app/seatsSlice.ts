@@ -27,7 +27,7 @@ export const seatsSlice = createSlice({
 
       reserved.forEach(place => {
         state.data[place.x][place.y] = {
-          ...state.data[place.x][place.y],
+          ...(state.data[place.x][place.y] as Seat),
           reserved: true,
         };
       });
