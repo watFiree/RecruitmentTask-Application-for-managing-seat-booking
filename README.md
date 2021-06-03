@@ -34,6 +34,8 @@ const seat = {
 
 - Formik
 
+- React Testing Library
+
 ## Installation 💿
 
 ```bash
