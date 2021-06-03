@@ -18,7 +18,7 @@ const seat = {
 };
 ```
 
-#### **I have added a few tests. It is my first project with them but I am still learing them**
+#### **I have added a few tests. It is my first project with them and I am still learing.**
 
 ## Tech stack 🔧
 
