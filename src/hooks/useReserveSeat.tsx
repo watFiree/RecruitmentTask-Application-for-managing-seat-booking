@@ -5,6 +5,7 @@ import { SimplifiedSeat } from '../types';
 
 import findSeatsAlongside from '../functions/findSeatsAlongside';
 import pickRandomSeats from '../functions/pickRandomSeats';
+import notNextTo from '../functions/findSeatsNotNextTo';
 
 const useReserveSeat = (numberOfSeats: number, nextToEachOther: boolean) => {
   const [ticketsLeft, setTicketsLeft] = useState(0);
@@ -13,7 +14,8 @@ const useReserveSeat = (numberOfSeats: number, nextToEachOther: boolean) => {
 
   useEffect(() => {
     if (nextToEachOther) {
-      const chosenAlongside = findSeatsAlongside(data, numberOfSeats);
+      const chosenAlongside = notNextTo(data, numberOfSeats);
+      console.log(chosenAlongside);
       setTicketsLeft(numberOfSeats - chosenAlongside.length);
       return setSeatsChoosen(chosenAlongside);
     }
